@@ -1,0 +1,10 @@
+begin
+declare x : string, y : string, z : natural, b : boolean;
+% comment %
+z := 0;
+x := "10";
+b := true and (false or true);
+c := not (true and false or true);
+while z do x := "3" od;
+if z then x := "3" else x := "5" fi
+end
