@@ -40,6 +40,8 @@ syntax Statement
    = asgStat: Id var ":="  Expression val 
    | ifElseStat: "if" Expression cond "then" {Statement ";"}*  thenPart "else" {Statement ";"}* elsePart "fi"
    | whileStat: "while" Expression cond "do" {Statement ";"}* body "od"
+   | forStat: "for" "(" Statement init ";" Expression maint ";" Expression guard ")" 
+   	 "do" {Statement ";"}* body "od"
   ;  
      
 syntax Expression 
