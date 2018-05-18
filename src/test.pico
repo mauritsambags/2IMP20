@@ -1,11 +1,38 @@
 begin
+% Examples of normal statements that were already present in the parser spec.%
 declare x : string, y : string, z : natural, b : boolean;
 % comment %
 z := 0;
 x := "10";
+while z do x := "3" od;
+if z then x := "3" else x := "5" fi;
+
+% Examples of boolean expressions, including parentheses.
+  As described in Syntax.rsc, these operators are declared to be left-associative
+  so that they are in line with already declared operators.
+%
+a := true and false or true;
 b := true and (false or true);
 c := not (true and false or true);
-while z do x := "3" od;
-for (x:=1; y:= y+1;z or false) do y := 3; x := "ok" od;
-if z then x := "3" else x := "5" fi
+d := a and b or not c and not d;
+e := not (not b and not c);
+
+% For loop declarations.
+  As described, the for loop follows the following syntax:
+  for ({initialisation}; {maintenance}; {loop guard}) do
+  	{loop body}
+  od
+%
+for (x := 1; y := x;z or false) do y := 3; x := "ok" od;
+
+% Some more sensible implementations using for-loops:%
+x := 1;
+for (i := 0; i := i + 1; not (i - n)) do
+	x := x + i
+od;
+
+a := false;
+for (b := true; b := a; b) do
+	i := i + 1
+od
 end

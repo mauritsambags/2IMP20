@@ -1,3 +1,9 @@
+/*
+Assignment 1 2IMP20.
+Authors: Maurits Ambags (0771400), Jeanpierre Balster ().
+GLT Group 36.
+*/
+
 module Syntax
 
 import Prelude;
@@ -55,18 +61,19 @@ syntax Type
 
 /*
 The for-loop construct can be constructed in several ways; Rascal itself chooses to have a single argument
-in the header of the for-loop, containing a generator. This seems overly complicated for the (seemingly imperative)
-programming language that we are developing. On top of this, we would require a notion of generators and/or
-iterators in order to then semantically describe the behaviour of a for-loop in terms of a while-loop.
+in the header of the for-loop, containing a generator.
+This seems overly complicated for the (seemingly imperative) programming language that we are developing.
+On top of this, we would require a notion of generators and/or iterators in order to then semantically 
+describe the behaviour of a for-loop in terms of a while-loop.
 Instead, we use the C++/Java-like notation of a for-loop, consisting of an initialisation statement,
-a maintenance statement and a guard expression. This is useful because we can now easily express this
-for-loop in terms of a while-loop like so:
+a maintenance statement and a guard expression. 
+This is useful because we can now easily express this for-loop in terms of a while-loop like so:
 
 {initialisation statement};
-while ({guard expression}){
+while ({guard expression}) do
 	{loop body};
 	{maintenance statement};
-}
+od
 
 This hopefully saves us a lot of headaches in the future when specifying semantics for our syntax.
 */
@@ -90,7 +97,7 @@ syntax Expression
    | strCon: String string
    | natCon: Natural natcon
    | bracket "(" Expression e ")"
-   | left ( b_not: "not" Expression b
+   > left ( b_not: "not" Expression b
    		  | b_and: Expression lhs "and" Expression rhs
    	      | b_or: Expression lhs "or" Expression lhs
    		  )
