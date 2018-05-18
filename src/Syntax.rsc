@@ -65,23 +65,34 @@ in the header of the for-loop, containing a generator.
 This seems overly complicated for the (seemingly imperative) programming language that we are developing.
 On top of this, we would require a notion of generators and/or iterators in order to then semantically 
 describe the behaviour of a for-loop in terms of a while-loop.
-Instead, we use the C++/Java-like notation of a for-loop, consisting of an initialisation statement,
-a maintenance statement and a guard expression. 
+Instead, we use the C++/Java-like notation of a for-loop, consisting of initialisation statement(s),
+a guard expression and maintenance statement(s). 
 This is useful because we can now easily express this for-loop in terms of a while-loop like so:
 
-{initialisation statement};
+{initialisation statement(s)};
 while ({guard expression}) do
 	{loop body};
-	{maintenance statement};
+	{maintenance statement(s)};
 od
 
-This hopefully saves us a lot of headaches in the future when specifying semantics for our syntax.
+Note that there can be an arbitary (possibly zero) amount of statements in the initialisation and maintenance
+statements. We do not see the reason to limit the functionality by only allowing one statement.
+For instance, it could be useful to have no initialisation or maintenance at all, or have multiple
+assignments that need to be executed per loop iteration. Naturally, there is only one Expression allowed
+as the loop guard, since this expression requires to be evaluated. If the user wishes to use multiple
+guards, they are able to concatenate these using logical operators.
+
+Note that, while it may be ambiguous to the user what exactly is going on in a for-loop declaration such as
+"for(x:=1;y:=2;z:=3;x;x:=y;z:=y)do z:=1 od;",
+we can still parse this easily since the three operands alternate between statement(s),
+an expression, then statement(s). Hence, a parser can look at this example and see that "x" is an expression.
+Therefore, everything preceding it is initialisation, and everything following it is maintenance.
 */
 syntax Statement 
    = asgStat: Id var ":="  Expression val 
    | ifElseStat: "if" Expression cond "then" {Statement ";"}*  thenPart "else" {Statement ";"}* elsePart "fi"
    | whileStat: "while" Expression cond "do" {Statement ";"}* body "od"
-   | forStat: "for" "(" Statement init ";" Statement maint ";" Expression guard ")" 
+   | forStat: "for" "(" {Statement ";"}* init ";" Expression guard ";" {Statement ";"}* maint ")" 
    	 "do" {Statement ";"}* body "od"
   ;  
 

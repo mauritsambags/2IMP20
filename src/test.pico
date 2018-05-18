@@ -1,9 +1,10 @@
 begin
-% Examples of normal statements that were already present in the parser spec.%
+% Examples of normal statements that were already present in the syntax spec, now including booleans.%
 declare x : string, y : string, z : natural, b : boolean;
 % comment %
 z := 0;
 x := "10";
+b := true;
 while z do x := "3" od;
 if z then x := "3" else x := "5" fi;
 
@@ -19,20 +20,27 @@ e := not (not b and not c);
 
 % For loop declarations.
   As described, the for loop follows the following syntax:
-  for ({initialisation}; {maintenance}; {loop guard}) do
+  for ({initialisation}; {loop guard}; {maintenance}) do
   	{loop body}
   od
 %
-for (x := 1; y := x;z or false) do y := 3; x := "ok" od;
+for (x := 1; z or false; y := x + 1) do y := 3; x := "ok" od;
 
-% Some more sensible implementations using for-loops:%
+% We can also make a for loop that has multiple statements in its initialisation and/or maintenance. %
+for (x := 1; y := 2; z; x := x + 1; y := y + 2) do z := false od;
+
+% Or have a for-loop with empty statements. %
+for (;true;) do x := x + 1 od;
+% This is effectively a while(true){} loop. %
+
+% Some more practical implementations using for-loops:%
 x := 1;
-for (i := 0; i := i + 1; not (i - n)) do
+for (i := 0; not (i - n); i := i + 1) do
 	x := x + i
 od;
 
 a := false;
-for (b := true; b := a; b) do
+for (b := true; b; b := a) do
 	i := i + 1
 od
 end
