@@ -16,7 +16,7 @@ a := true and false or true;
 b := true and (false or true);
 c := not (true and false or true);
 d := a and b or not c and not d;
-e := not (not b and not c);
+e := not not b and not c;
 
 % For loop declarations.
   As described, the for loop follows the following syntax:

@@ -13,7 +13,7 @@ We will model booleans as separate lexical components, so they should not be con
 So, exclude the Boolean qualifiers from the regexp that matches Id's.
 Naturally, a boolean can only take the values "true" or "false", so these are the only allowed patterns.
 */
-lexical Id  = ([a-z][a-z0-9]* !>> [a-z0-9]) \ (PicoKeywords | Boolean);
+lexical Id  = ([a-z][a-z0-9]* !>> [a-z0-9]) \ PicoKeywords;
 lexical Natural = [0-9]+ ;
 lexical String = "\"" ![\"]*  "\"";
 lexical Boolean = ("true" | "false");
@@ -30,7 +30,8 @@ keyword PicoKeywords = "begin" | "end" |
                        "declare" | 
                        "if" | "then" | "else" | "fi" | 
                        "while" | "do" | "od" |
-                       "not" | "and" | "or"
+                       "not" | "and" | "or" |
+                       "true" | "false"
                        ;
 
 layout Layout = WhitespaceAndComment* !>> [\ \t\n\r%];
@@ -107,15 +108,18 @@ syntax Expression
    = id: Id name
    | strCon: String string
    | natCon: Natural natcon
+   | boolCon: Boolean bool
    | bracket "(" Expression e ")"
-   > left ( b_not: "not" Expression b
-   		  | b_and: Expression lhs "and" Expression rhs
-   	      | b_or: Expression lhs "or" Expression lhs
-   		  )
+   > left b_not: "not" Expression e
+   > left b_and: Expression lhs "and" Expression rhs
+   > left b_or: Expression lhs "or" Expression rhs
    > left conc: Expression lhs "||" Expression rhs
    > left ( add: Expression lhs "+" Expression rhs
           | sub: Expression lhs "-" Expression rhs
           )
+   > left 	( neq: Expression lhs "!=" Expression rhs
+   			| eq: Expression lhs "==" Expression rhs
+   			)
   ;
 
 public start[Program] program(str s) {
