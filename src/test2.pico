@@ -1,0 +1,14 @@
+begin
+declare s : string, n : natural, x : natural, b : boolean, a : boolean, c : boolean;
+n := 10;
+s := "abc";
+n := 1;
+b := true;
+b := 10; %cast error int -> bool% 
+b := false and true;
+b := ("10" == "11"); %cast error str -> bool%
+b := (a == c);
+
+
+x := 1
+end
