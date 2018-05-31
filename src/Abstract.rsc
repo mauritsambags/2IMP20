@@ -18,7 +18,7 @@ public data EXP =
      | add(EXP left, EXP right)
      | sub(EXP left, EXP right)
      | conc(EXP left, EXP right)
-     | b_not(EXP left, EXP right)
+     | b_not(EXP val)
      | b_and(EXP left, EXP right)
      | b_or(EXP left, EXP right)
      | eq(EXP left, EXP right)

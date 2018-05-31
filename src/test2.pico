@@ -8,7 +8,8 @@ b := 10; %cast error int -> bool%
 b := false and true;
 b := ("10" == "11"); %cast error str -> bool%
 b := (a == c);
-
+b := not c;
+b := not (not a and b or c);
 
 x := 1
 end
