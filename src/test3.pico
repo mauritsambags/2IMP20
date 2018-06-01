@@ -1,0 +1,44 @@
+begin
+declare b:boolean, number:natural, text:string;
+
+%Type errors in declarations:%
+b := true;
+b := "5"; %Type error: Required boolean, got string%
+number := 1;
+number := true; %Type error: Required natural, got boolean%
+text := "hallo!";
+text := 54; %Type error: Required string, got natural%
+c := 5; %Undeclared variable c%
+
+number := (5 == 5);
+
+%Type errors in expression statements:%
+b := (not b) and (b) or b;
+b := (not number) and (text) or not number; 
+%Multiple messages at this line.
+	- Required boolean, got natural
+	- Required boolean, got string
+	- Required boolean, got natural%
+	
+number := 10;
+number := false; %Type error: Required natural, got boolean%
+
+text := "hallo!";
+text := 55; %Type error: Required string, got natural%
+
+
+%Type errors in statements:%
+%No type errors:%
+for (number := 10; b; text := "55") do
+	b := true;
+	number := 55;
+	text := "top ding!"
+od;
+
+%Multiple Type errors%
+for (number := 10; number; text := "55") do %Type error: Required boolean, got natural%
+	b := 55;		%Type error: Required boolean got natural%
+	number := true;	%Type error: Required natural, got boolean%
+	text := 55		%Type error: Required string, got natural%
+od
+end
