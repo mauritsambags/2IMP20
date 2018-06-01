@@ -1,4 +1,9 @@
 begin
+%
+Assignment 2 2IMP20.
+Authors: Maurits Ambags (0771400), Jeanpierre Balster ().
+GLT Group 36.
+%
 declare b:boolean, number:natural, text:string;
 
 %Type errors in declarations:%
@@ -12,8 +17,10 @@ c := 5; %Undeclared variable c%
 
 b := (true == true) != false == true != not false;
 number := (true == true); %Type error: Required natural, got boolean%
-b := ("test" == "test"); %Again a Type error: We can only test booleans with each other%
+b := ("test" == "test"); %Again a Type error: We can only test booleans with each other, as described in Typecheck.rsc.%
 b := (5 == 5); %Again a Type error: We can only test booleans with each other%
+b := (true == 5);%Note that both operands are required to be of type boolean.%
+b := ("ok" == false);%Now for the right operand.%
 
 
 %Type errors in expression statements:%

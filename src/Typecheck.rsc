@@ -1,3 +1,9 @@
+/*
+Assignment 2 2IMP20.
+Authors: Maurits Ambags (0771400), Jeanpierre Balster ().
+GLT Group 36.
+*/
+
 module Typecheck
 
 import Prelude;
@@ -12,6 +18,17 @@ str required(TYPE t, str got) = "Required <getName(t)>, got <got>";
 str required(TYPE t1, TYPE t2) = required(t1, getName(t2));
 
 // compile Expressions.
+
+/*
+It should be noted that Expressions are checked, but once an error is found,
+the rest of the Expression is not parsed further. This can be fixed by, instead
+of just calling addError(), also continuing to call checkExp on the operands.
+This was not added though, because if part of an Expression is incorrect, the user will
+instantly be notified of any further errors as soon as the first error is resolved.
+As such, this should not actually hinder code development.
+Furthermore, in this case likely the red underlines would overlap between nested errors,
+so the visual indication would not even be noticeable.
+*/
 
 TENV checkExp(exp:natCon(int N), TYPE req, TENV env) =                              
   req == natural() ? env : addError(env, exp@location, required(req, "natural"));
@@ -41,8 +58,12 @@ TENV checkExp(exp:sub(EXP E1, EXP E2), TYPE req, TENV env) =
 TENV checkExp(exp:conc(EXP E1, EXP E2), TYPE req, TENV env) =                    
   req == string() ? checkExp(E1, string(), checkExp(E2, string(), env))
                    : addError(env, exp@location, required(req, "string"));
-                 
-//Boolean not.  
+
+/*
+"New" Expression checks for the added logical operators. These are pretty standard,
+following the example of operators for other types.
+*/                 
+//Boolean not.
 TENV checkExp(exp:b_not(EXP E1), TYPE req, TENV env) =
  req == boolean() ? checkExp(E1, boolean(), env) : addError(env, exp@location, required(req, "boolean"));
  
@@ -56,17 +77,21 @@ TENV checkExp(exp:b_or(EXP E1, EXP E2), TYPE req, TENV env) =
  req == boolean() ? checkExp(E1, boolean(), checkExp(E2, boolean(), env))
  	: addError(env, exp@location, required(req, "boolean"));
  	
+/*
+Sadly, the comparison operator (as well as !=) only checks for boolean operands.
+We considered implementing different cases for this operator to distinguish comparisons between
+booleans, naturals and strings separately. However, this required us to completely rewrite
+the Expression Syntax in order for an Expression to "inherit" the type of its operands.
+For example, if E1 = add(natural left, natural right), then E1 should be assumed to be of type "NatExp".
+This was attempted but, since the parser does not actually report why it fails to parse (when the rascal code compiles),
+this was reverted after failing to get the parser working again.
+*/
+
 //Boolean ==.
-//TENV checkExp(exp:eq(EXP E1, EXP E2), TYPE req, TENV env) =
-// req == boolean() ? checkExp(E1, boolean(), checkExp(E2, boolean(), env))
-// 	: addError(env, exp@location, required(req, "boolean"));
- 	
-TENV checkExp(exp:eq(EXP E1, EXP E2), TYPE req, TENV env) {
-	if(req == boolean())	
-		return checkExp(E1, boolean(), checkExp(E2, boolean(), env));
-	else
-	return addError(env, exp@location, required(req, "boolean"));
-}
+TENV checkExp(exp:eq(EXP E1, EXP E2), TYPE req, TENV env) =
+	req == boolean() ? checkExp(E1, boolean(), checkExp(E2, boolean(), env))
+		: addError(env, exp@location, required(req, "boolean"));
+		
 //Boolean !=.
 TENV checkExp(exp:neq(EXP E1, EXP E2), TYPE req, TENV env) =
  req == boolean() ? checkExp(E1, boolean(), checkExp(E2, boolean(), env))
@@ -100,9 +125,10 @@ TENV checkStat(stat:whileStat(EXP Exp,
     return env1;
 }
 
-// check the for statement
-// The for statement consist of 3 Statement lists and 1 Expression
-// that need to be tested for Type errors and undeclared variables.
+/*
+The for statement consists of three lists of statements (init, maint, body) as well as one guard expression.
+These can be checked in similar fashion as in the while statement.
+*/
 
 TENV checkStat(stat:forStat(list[STATEMENT] Stats1,
 							EXP Exp, 

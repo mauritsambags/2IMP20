@@ -1,5 +1,5 @@
 /*
-Assignment 1 2IMP20.
+Assignment 2 2IMP20.
 Authors: Maurits Ambags (0771400), Jeanpierre Balster ().
 GLT Group 36.
 */
