@@ -10,7 +10,11 @@ text := "hallo!";
 text := 54; %Type error: Required string, got natural%
 c := 5; %Undeclared variable c%
 
-number := (5 == 5);
+b := (true == true) != false == true != not false;
+number := (true == true); %Type error: Required natural, got boolean%
+b := ("test" == "test"); %Again a Type error: We can only test booleans with each other%
+b := (5 == 5); %Again a Type error: We can only test booleans with each other%
+
 
 %Type errors in expression statements:%
 b := (not b) and (b) or b;
@@ -23,9 +27,8 @@ b := (not number) and (text) or not number;
 number := 10;
 number := false; %Type error: Required natural, got boolean%
 
-text := "hallo!";
+text := "hello!";
 text := 55; %Type error: Required string, got natural%
-
 
 %Type errors in statements:%
 %No type errors:%
@@ -39,6 +42,13 @@ od;
 for (number := 10; number; text := "55") do %Type error: Required boolean, got natural%
 	b := 55;		%Type error: Required boolean got natural%
 	number := true;	%Type error: Required natural, got boolean%
-	text := 55		%Type error: Required string, got natural%
+	text := 55;		%Type error: Required string, got natural%
+	while true do
+		while false do
+			while 10 do %Type error: Required boolean, got natural%
+				text := ""
+			od
+		od
+	od
 od
 end

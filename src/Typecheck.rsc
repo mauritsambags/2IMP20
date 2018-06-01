@@ -64,10 +64,8 @@ TENV checkExp(exp:b_or(EXP E1, EXP E2), TYPE req, TENV env) =
 TENV checkExp(exp:eq(EXP E1, EXP E2), TYPE req, TENV env) {
 	if(req == boolean())	
 		return checkExp(E1, boolean(), checkExp(E2, boolean(), env));
-	if(req == natural())
-		return checkExp(E1, natural(), checkExp(E2, natural(), env));
-	if(req == string())
-		return checkExp(E1, string(), checkExp(E2, string(), env));
+	else
+	return addError(env, exp@location, required(req, "boolean"));
 }
 //Boolean !=.
 TENV checkExp(exp:neq(EXP E1, EXP E2), TYPE req, TENV env) =
@@ -88,7 +86,7 @@ TENV checkStat(stat:ifElseStat(EXP Exp,
                               list[STATEMENT] Stats1,
                               list[STATEMENT] Stats2),
                TENV env){
-    env0 = checkExp(Exp, natural(), env);
+    env0 = checkExp(Exp, boolean(), env);
     env1 = checkStats(Stats1, env0);
     env2 = checkStats(Stats2, env1);
     return env2;
@@ -97,14 +95,14 @@ TENV checkStat(stat:ifElseStat(EXP Exp,
 TENV checkStat(stat:whileStat(EXP Exp, 
                              list[STATEMENT] Stats1),
                  TENV env) {
-    env0 = checkExp(Exp, natural(), env);
+    env0 = checkExp(Exp, boolean(), env);
     env1 = checkStats(Stats1, env0);
     return env1;
 }
 
 // check the for statement
 // The for statement consist of 3 Statement lists and 1 Expression
-// that need to be tested for Type errors or undeclared variables.
+// that need to be tested for Type errors and undeclared variables.
 
 TENV checkStat(stat:forStat(list[STATEMENT] Stats1,
 							EXP Exp, 

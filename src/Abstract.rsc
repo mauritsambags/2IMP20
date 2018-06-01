@@ -10,6 +10,12 @@ public data PROGRAM =
 public data DECL =
   decl(PicoId name, TYPE tp);
 
+// We extend this abstract syntax tree with the boolean operators:
+// NOT, AND, OR
+// The operator NOT only takes a single expression while AND, OR takes two.
+// Then we also include the == and != operators to test whether the two
+// boolean Expressions are equal or not.
+
 public data EXP = 
        id(PicoId name)
      | natCon(int iVal)
@@ -25,6 +31,9 @@ public data EXP =
      | neq(EXP left, EXP right)
      ;
     
+    
+// We add the for loop statement here in order to Type check it
+// The for-loop construct is already described in detail in Syntax.rsc
 public data STATEMENT =
        asgStat(PicoId name, EXP exp)
      | ifElseStat(EXP exp, list[STATEMENT] thenpart, list[STATEMENT] elsepart)
